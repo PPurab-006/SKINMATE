@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+  
+  body {
+    background-color: #0A0B0D;
+    color: #F6F7F9;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* Custom subtle scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0D0E12;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #232731;
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #343A48;
+  }
+}
+
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 15px rgba(212, 248, 60, 0.4);
+  }
+  
+  .glass-panel {
+    background: rgba(18, 19, 23, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .glass-panel-elevated {
+    background: rgba(23, 24, 30, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .glass-card-hover {
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .glass-card-hover:hover {
+    border-color: rgba(212, 248, 60, 0.3);
+    box-shadow: 0 8px 30px -8px rgba(0, 0, 0, 0.7), 0 0 20px -5px rgba(212, 248, 60, 0.15);
+    transform: translateY(-2px);
+  }
+
+  .editorial-tag {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+}
+
+/* Custom range input styling */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: #252932;
+  height: 4px;
+  border-radius: 2px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #D4F83C;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(212, 248, 60, 0.5);
+  transition: transform 0.15s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
