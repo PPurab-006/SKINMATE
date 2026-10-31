@@ -36,7 +36,8 @@ COPY --from=frontend-builder /app/dist ./dist
 ENV HOST=0.0.0.0
 ENV PORT=8000
 ENV PYTHONUNBUFFERED=1
-ENV YOUCAM_MOCK_MODE=true
+ENV YOUCAM_MOCK_MODE=false
+ENV VITE_YOUCAM_MOCK_MODE=false
 ENV YOUCAM_BASE_URL=https://yce-api-01.makeupar.com
 
 EXPOSE 8000

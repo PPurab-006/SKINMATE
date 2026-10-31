@@ -34,7 +34,7 @@ export class YouCamClient {
     this.config = {
       baseUrl: config?.baseUrl || import.meta.env.VITE_YOUCAM_BASE_URL || 'https://yce-api-01.makeupar.com',
       apiKey: config?.apiKey || import.meta.env.VITE_YOUCAM_API_KEY || '',
-      isMockMode: config?.isMockMode ?? (import.meta.env.VITE_YOUCAM_MOCK_MODE !== 'false'),
+      isMockMode: config?.isMockMode ?? (import.meta.env.VITE_YOUCAM_MOCK_MODE === 'true'),
       remainingUnits: config?.remainingUnits ?? 1000,
     };
     this.backendBaseUrl = '';  // Proxied through Vite server /api
