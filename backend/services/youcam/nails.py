@@ -27,6 +27,8 @@ class NailAdapter:
         Applies nail polish color and finish (Glossy, Matte, Chrome, Shimmer).
         """
         options = {"color_hex": color_hex, "finish": finish}
+        if image_url and (image_url.startswith("http://") or image_url.startswith("https://")):
+            options["src_file_url"] = image_url
         task = await self.task_manager.create_task("nail-vto", file_id, options=options, unit_cost=1)
         poll_res = await self.task_manager.poll_task("nail-vto", task.task_id)
         if not poll_res.is_mock and poll_res.status != "success":

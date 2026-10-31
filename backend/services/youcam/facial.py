@@ -16,13 +16,17 @@ class FacialAdapter:
     def __init__(self, task_manager: TaskManager):
         self.task_manager = task_manager
 
-    async def get_facial_color_tones(self, file_id: str) -> FacialColorTone:
+    async def get_facial_color_tones(self, file_id: str, image_url: str = "") -> FacialColorTone:
         """
         Analyzes dominant cutaneous tones, undertone, and seasonal palette.
         """
+        options = {}
+        if image_url and (image_url.startswith("http://") or image_url.startswith("https://")):
+            options["src_file_url"] = image_url
         task = await self.task_manager.create_task(
             service_slug="facial-color-tones",
             file_id=file_id,
+            options=options,
             unit_cost=1
         )
         poll_res = await self.task_manager.poll_task(
@@ -40,13 +44,17 @@ class FacialAdapter:
             season_palette=raw.get("season_palette", "Warm Autumn")
         )
 
-    async def get_face_attributes(self, file_id: str) -> FaceAttributes:
+    async def get_face_attributes(self, file_id: str, image_url: str = "") -> FaceAttributes:
         """
         Analyzes facial symmetry, geometric shape, and proportions.
         """
+        options = {}
+        if image_url and (image_url.startswith("http://") or image_url.startswith("https://")):
+            options["src_file_url"] = image_url
         task = await self.task_manager.create_task(
             service_slug="face-attr-analysis",
             file_id=file_id,
+            options=options,
             unit_cost=1
         )
         poll_res = await self.task_manager.poll_task(
@@ -69,6 +77,8 @@ class FacialAdapter:
         Simulates facial lifting / tightening with 0-100% intensity.
         """
         options = {"intensity": intensity}
+        if image_url and (image_url.startswith("http://") or image_url.startswith("https://")):
+            options["src_file_url"] = image_url
         task = await self.task_manager.create_task(
             service_slug="face-lift",
             file_id=file_id,
@@ -93,7 +103,9 @@ class FacialAdapter:
         """
         Applies aesthetic facial contour micro-adjustments (jawline, chin, cheekbones).
         """
-        options = parameters or {"jawline": 15, "chin": 10, "cheekbones": 15}
+        options = dict(parameters or {"jawline": 15, "chin": 10, "cheekbones": 15})
+        if image_url and (image_url.startswith("http://") or image_url.startswith("https://")):
+            options["src_file_url"] = image_url
         task = await self.task_manager.create_task(
             service_slug="face-reshape",
             file_id=file_id,

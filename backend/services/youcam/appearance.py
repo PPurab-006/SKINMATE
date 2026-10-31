@@ -64,7 +64,9 @@ class AppearanceAdapter:
 
     async def apply_body_reshape(self, file_id: str, parameters: Optional[Dict[str, Any]] = None, image_url: str = "") -> NormalizedVtoResult:
         """Applies full-body silhouette shaping."""
-        options = parameters or {"waist": -10, "legs": 5}
+        options = dict(parameters or {"waist": -10, "legs": 5})
+        if image_url and (image_url.startswith("http://") or image_url.startswith("https://")):
+            options["src_file_url"] = image_url
         task = await self.task_manager.create_task("body-reshape", file_id, options=options, unit_cost=2)
         poll_res = await self.task_manager.poll_task("body-reshape", task.task_id)
         if not poll_res.is_mock and poll_res.status != "success":
@@ -83,6 +85,8 @@ class AppearanceAdapter:
     async def apply_breast_augmentation(self, file_id: str, cup_adjustment: str = "+1 Cup", image_url: str = "") -> NormalizedVtoResult:
         """Simulates aesthetic breast augmentation volumetrics."""
         options = {"cup_size": cup_adjustment}
+        if image_url and (image_url.startswith("http://") or image_url.startswith("https://")):
+            options["src_file_url"] = image_url
         task = await self.task_manager.create_task("breast-augmentation", file_id, options=options, unit_cost=2)
         poll_res = await self.task_manager.poll_task("breast-augmentation", task.task_id)
         if not poll_res.is_mock and poll_res.status != "success":
@@ -101,6 +105,8 @@ class AppearanceAdapter:
     async def apply_abs_filter(self, file_id: str, definition_level: str = "Toned", image_url: str = "") -> NormalizedVtoResult:
         """Applies athletic core/abdominal muscle definition."""
         options = {"definition": definition_level}
+        if image_url and (image_url.startswith("http://") or image_url.startswith("https://")):
+            options["src_file_url"] = image_url
         task = await self.task_manager.create_task("ai-abs", file_id, options=options, unit_cost=2)
         poll_res = await self.task_manager.poll_task("ai-abs", task.task_id)
         if not poll_res.is_mock and poll_res.status != "success":

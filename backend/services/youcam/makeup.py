@@ -26,6 +26,8 @@ class MakeupAdapter:
         Applies discrete cosmetics effects (e.g. lipstick, blush, eyeshadow).
         """
         options = {"effects": effects}
+        if image_url and (image_url.startswith("http://") or image_url.startswith("https://")):
+            options["src_file_url"] = image_url
         task = await self.task_manager.create_task("makeup-vto", file_id, options=options, unit_cost=1)
         poll_res = await self.task_manager.poll_task("makeup-vto", task.task_id)
         if not poll_res.is_mock and poll_res.status != "success":
@@ -110,6 +112,8 @@ class MakeupAdapter:
         Applies cosmetic contact lens coloration to the iris.
         """
         options = {"color": lens_color}
+        if image_url and (image_url.startswith("http://") or image_url.startswith("https://")):
+            options["src_file_url"] = image_url
         task = await self.task_manager.create_task("eye-color", file_id, options=options, unit_cost=1)
         poll_res = await self.task_manager.poll_task("eye-color", task.task_id)
         if not poll_res.is_mock and poll_res.status != "success":

@@ -5,9 +5,14 @@ import { HairAnalysisResult } from '../../types/hair';
 export class HairService {
   public static async analyzeHair(file: File | Blob, previewUrl: string): Promise<HairAnalysisResult> {
     try {
-      // 1. Upload and process file via backend pipeline
-      const uploadRes = await youCamClient.uploadFile(file);
-      const fileId = uploadRes.file_id || `file_${Date.now()}`;
+      // 1. Upload and process file via backend pipeline if file bytes provided
+      let fileId = '';
+      if (file && file.size > 0) {
+        const uploadRes = await youCamClient.uploadFile(file);
+        fileId = uploadRes.file_id;
+      } else if (previewUrl && (previewUrl.startsWith('http://') || previewUrl.startsWith('https://'))) {
+        fileId = previewUrl;
+      }
 
       // 2. Call backend hair diagnostics endpoint
       const response = await fetch('/api/youcam/hair/analyze', {

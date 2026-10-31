@@ -61,9 +61,14 @@ export class SkinService {
    */
   public static async analyzeSkin(file: File | Blob, previewUrl: string): Promise<SkinAnalysisResult> {
     try {
-      // 1. Upload and normalize file via backend pipeline
-      const uploadRes = await youCamClient.uploadFile(file);
-      const fileId = uploadRes.file_id || `file_${Date.now()}`;
+      // 1. Upload and normalize file via backend pipeline if file bytes provided
+      let fileId = '';
+      if (file && file.size > 0) {
+        const uploadRes = await youCamClient.uploadFile(file);
+        fileId = uploadRes.file_id;
+      } else if (previewUrl && (previewUrl.startsWith('http://') || previewUrl.startsWith('https://'))) {
+        fileId = previewUrl;
+      }
 
       // 2. Call backend skin intelligence endpoint
       const response = await fetch('/api/youcam/skin/analyze', {

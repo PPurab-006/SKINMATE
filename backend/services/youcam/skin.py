@@ -27,15 +27,19 @@ class SkinAdapter:
         """
         Executes AI Skin Analysis along with optional Fitzpatrick and Color Tone evaluation.
         """
+        options = {
+            "dst_actions": ["wrinkle", "pore", "texture", "acne", "age_spot", "redness", "oiliness", "eye_bag", "moisture", "radiance"],
+            "miniserver_args": {"enable_mask_overlay": True},
+            "format": "json"
+        }
+        if image_url and (image_url.startswith("http://") or image_url.startswith("https://")):
+            options["src_file_url"] = image_url
+
         # Primary Skin Analysis Task with verified S2S accepted actions
         skin_task = await self.task_manager.create_task(
             service_slug="skin-analysis",
             file_id=file_id,
-            options={
-                "dst_actions": ["wrinkle", "pore", "texture", "acne", "age_spot", "redness", "oiliness", "eye_bag", "moisture", "radiance"],
-                "miniserver_args": {"enable_mask_overlay": True},
-                "format": "json"
-            },
+            options=options,
             unit_cost=1
         )
 
@@ -95,6 +99,8 @@ class SkinAdapter:
             "timeline_weeks": weeks,
             "concerns": target_concerns or ["pores", "texture", "radiance"]
         }
+        if image_url and (image_url.startswith("http://") or image_url.startswith("https://")):
+            options["src_file_url"] = image_url
         task = await self.task_manager.create_task(
             service_slug="skin-simulation",
             file_id=file_id,

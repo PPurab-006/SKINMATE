@@ -11,7 +11,7 @@ from typing import Dict, Any, Optional
 import httpx
 
 from backend.services.youcam.authentication import YouCamAuthManager
-from backend.services.youcam.exceptions import YouCamTaskError, YouCamTimeoutError, YouCamBaseException
+from backend.services.youcam.exceptions import YouCamTaskError, YouCamTimeoutError, YouCamBaseException, YouCamValidationError
 from backend.services.youcam.schemas import TaskCreationResponse, TaskPollResponse
 
 logger = logging.getLogger("skinmate.youcam.task_manager")
@@ -87,16 +87,38 @@ class TaskManager:
                 is_mock=True
             )
 
-        # 3. Live Execution: Deduct units safely before calling provider
-        self.auth.deduct_units(count=unit_cost, service_slug=service_slug)
+        # 3. Payload preparation: Resolve src_file_url or src_file_id
+        payload = {**(options or {})}
 
-        payload = {**options}
+        # Extract candidate URL from options (src_file_url or image_url)
+        candidate_url = payload.pop("image_url", None) or payload.get("src_file_url")
+        if candidate_url and isinstance(candidate_url, str) and candidate_url.startswith(("http://", "https://")):
+            payload["src_file_url"] = candidate_url
+
         if "src_file_url" not in payload:
-            if file_id.startswith("http://") or file_id.startswith("https://"):
+            if file_id and (file_id.startswith("http://") or file_id.startswith("https://")):
                 payload["src_file_url"] = file_id
-            elif file_id and not file_id.startswith("mock-"):
+            elif file_id and not file_id.startswith("mock-") and not file_id.startswith("file_mock"):
                 payload["src_file_id"] = file_id
                 payload["file_id"] = file_id
+
+        # If neither is present, fail fast before making network calls or deducting units
+        if not payload.get("src_file_id") and not payload.get("src_file_url") and not payload.get("src_file_urls") and not payload.get("src_file_ids"):
+            raise YouCamValidationError(
+                "A valid uploaded portrait or accessible public image URL is required for live YouCam analysis."
+            )
+
+        # Service specific schemas: hair-type-detection requires 3 views (triplicate single portrait)
+        if service_slug == "hair-type-detection":
+            if "src_file_url" in payload:
+                payload["src_file_urls"] = [payload.pop("src_file_url")] * 3
+            elif "src_file_id" in payload:
+                payload["src_file_ids"] = [payload.pop("src_file_id")] * 3
+                payload.pop("file_id", None)
+
+        # 4. Live Execution: Deduct units safely before calling provider
+        self.auth.deduct_units(count=unit_cost, service_slug=service_slug)
+
         headers = {
             **self.auth.get_auth_headers(),
             "Content-Type": "application/json"

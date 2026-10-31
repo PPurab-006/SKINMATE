@@ -68,6 +68,10 @@ export class YouCamClient {
     }
 
     try {
+      if (!file || file.size === 0) {
+        throw new Error('Please select or capture a valid image file before uploading.');
+      }
+
       const formData = new FormData();
       formData.append('file', file);
       formData.append('service_slug', 'generic');
@@ -85,15 +89,13 @@ export class YouCamClient {
           file_url: data.file_url || URL.createObjectURL(file)
         };
       }
-    } catch (e) {
-      console.warn('Backend proxy upload unreachable, using local fallback:', e);
-    }
 
-    return {
-      status: 'success',
-      file_id: `mock-file-${Date.now()}`,
-      file_url: URL.createObjectURL(file)
-    };
+      const errJson = await response.json().catch(() => ({}));
+      throw new Error(errJson.detail || `Image upload failed (HTTP ${response.status})`);
+    } catch (e: any) {
+      console.error('YouCam image upload failed:', e);
+      throw e;
+    }
   }
 
   /**
