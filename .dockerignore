@@ -1,0 +1,17 @@
+node_modules
+backend/venv
+.venv
+dist
+.env
+.env.*
+.git
+.gitignore
+*.log
+__pycache__
+*.pyc
+video-production
+demo-production
+*.mp4
+*.wav
+contact_sheet*.png
+demo_contact_sheet.png

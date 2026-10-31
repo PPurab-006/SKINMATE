@@ -4,68 +4,61 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        editorial: {
-          bg: '#0A0B0D',
-          surface: '#111317',
-          card: '#16181E',
-          cardElevated: '#1D2028',
-          subtle: '#252932',
-          border: 'rgba(255, 255, 255, 0.08)',
-          borderLight: 'rgba(255, 255, 255, 0.15)',
+        beauty: {
+          ivory: '#F8F6F0',
+          cream: '#EFECE3',
+          surface: '#FFFFFF',
+          forest: {
+            DEFAULT: '#243C32',
+            hover: '#1B2E26',
+            light: '#2E4E41',
+            subtle: 'rgba(36, 60, 50, 0.06)',
+            soft: 'rgba(36, 60, 50, 0.12)',
+          },
+          sage: {
+            DEFAULT: '#A6B39A',
+            light: '#DCE2D6',
+            subtle: 'rgba(166, 179, 154, 0.2)',
+          },
+          charcoal: {
+            DEFAULT: '#252923',
+            heading: '#1A1E18',
+            body: '#383D35',
+          },
+          muted: {
+            DEFAULT: '#85877F',
+            light: '#B6B8AF',
+            border: '#E3DFD5',
+            soft: '#EDE9E0',
+          },
           lime: {
-            DEFAULT: '#D4F83C',
-            hover: '#C0E228',
-            dark: '#87A412',
-            subtle: 'rgba(212, 248, 60, 0.12)',
-            glow: 'rgba(212, 248, 60, 0.28)',
+            DEFAULT: '#B4D836',
+            subtle: 'rgba(180, 216, 54, 0.15)',
           },
-          text: {
-            primary: '#F6F7F9',
-            secondary: '#A1A7B2',
-            muted: '#666C77',
-          },
-          accent: {
-            green: '#10B981',
-            amber: '#F59E0B',
-            red: '#EF4444',
-            blue: '#38BDF8',
-            purple: '#C084FC',
-            rose: '#FB7185',
+          terracotta: {
+            DEFAULT: '#C76D54',
+            subtle: 'rgba(199, 109, 84, 0.12)',
           }
         }
       },
       fontFamily: {
+        serif: ['Playfair Display', 'Georgia', 'serif'],
         sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        display: ['Syne', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'Menlo', 'monospace'],
       },
       fontSize: {
-        '2xs': ['0.6875rem', { lineHeight: '0.9rem' }],
+        '2xs': ['0.6875rem', { lineHeight: '0.95rem' }],
       },
       boxShadow: {
-        'subtle-glow': '0 0 25px -5px rgba(212, 248, 60, 0.15)',
-        'lime-glow': '0 0 35px -5px rgba(212, 248, 60, 0.3)',
-        'card-dark': '0 4px 20px -2px rgba(0, 0, 0, 0.6)',
-        'modal-dark': '0 20px 50px -10px rgba(0, 0, 0, 0.85)',
+        'beauty-sm': '0 2px 8px -2px rgba(36, 60, 50, 0.05), 0 1px 3px rgba(36, 60, 50, 0.03)',
+        'beauty-md': '0 6px 18px -4px rgba(36, 60, 50, 0.08), 0 2px 6px rgba(36, 60, 50, 0.04)',
+        'beauty-card': '0 2px 12px -2px rgba(36, 60, 50, 0.05), 0 1px 3px rgba(36, 60, 50, 0.03)',
+        'beauty-card-hover': '0 12px 28px -6px rgba(36, 60, 50, 0.08), 0 4px 10px rgba(36, 60, 50, 0.04)',
+        'beauty-modal': '0 25px 60px -15px rgba(36, 60, 50, 0.25)',
       },
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'subtle-grid': 'radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px)',
-      },
-      animation: {
-        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'scan': 'scan 2.5s ease-in-out infinite',
-      },
-      keyframes: {
-        scan: {
-          '0%, 100%': { transform: 'translateY(0%)' },
-          '50%': { transform: 'translateY(95%)' },
-        }
-      }
     },
   },
   plugins: [],

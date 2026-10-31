@@ -1,10 +1,11 @@
 export type AppTab = 
-  | 'dashboard'
-  | 'skin-lab'
-  | 'hair-lab'
-  | 'style-studio'
-  | 'routine-builder'
-  | 'marketplace'
+  | 'home'
+  | 'skin-hair'
+  | 'for-you'
+  | 'shop'
+  | 'routine'
+  | 'lists'
+  | 'studio'
   | 'profile';
 
 export type StudioTab = 
@@ -13,6 +14,11 @@ export type StudioTab =
   | 'makeup'
   | 'nails'
   | 'face';
+
+export type DiscoverViewMode =
+  | 'overview'
+  | 'skin-consultation'
+  | 'hair-consultation';
 
 export interface ImageUploadResult {
   file: File;

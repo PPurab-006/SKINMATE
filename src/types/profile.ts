@@ -4,13 +4,17 @@ import { SavedLook } from './style';
 import { Routine } from './routine';
 
 export interface UserAppearanceProfile {
-  name: string;
-  avatarUrl: string;
-  age: number;
-  genderIdentity: string;
+  name?: string;
+  avatarUrl?: string;
+  age?: number;
+  genderIdentity?: string;
   
-  // Diagnostic snapshots
-  skin: {
+  hasCompletedSkinConsultation: boolean;
+  hasCompletedHairConsultation: boolean;
+  isSampleProfile: boolean;
+
+  // Diagnostic snapshots (populated once user completes a guided consultation)
+  skin?: {
     type: SkinType;
     fitzpatrick: FitzpatrickType;
     colorTone: FacialColorTone;
@@ -18,7 +22,7 @@ export interface UserAppearanceProfile {
     allergies: string[];
   };
   
-  hair: {
+  hair?: {
     pattern: HairPattern;
     porosity: HairPorosity;
     scalpType: ScalpType;
@@ -27,11 +31,13 @@ export interface UserAppearanceProfile {
   };
 
   preferences: {
-    budgetTier: 'Budget Conscious (Under ₹2,000)' | 'Balanced Quality (₹2,000 - ₹5,000)' | 'Luxury Clinical (₹5,000+)';
-    preferredFinish: 'Dewy / Glass Skin' | 'Natural Velvet' | 'Matte';
+    budgetTier: 'Under ₹2,000' | '₹2,000 - ₹5,000' | '₹5,000+';
+    preferredFinish: 'Dewy' | 'Natural' | 'Matte';
     crueltyFreeOnly: boolean;
     fragranceFreeOnly: boolean;
-    targetRoutineBudget: number; // e.g. 3500
+    veganOnly?: boolean;
+    monthlyBudget?: number;
+    targetRoutineBudget: number; // in INR
   };
 
   privacy: {
@@ -40,7 +46,7 @@ export interface UserAppearanceProfile {
     cloudSyncEnabled: boolean;
   };
 
-  // Activity logs
+  // Saved items & activity
   savedProductIds: string[];
   savedLooks: SavedLook[];
   savedRoutines: Routine[];

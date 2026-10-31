@@ -10,6 +10,7 @@ export interface SkinConcernMetric {
   description: string;
   affectedRegions: string[];
   heatmapCoordinates?: { x: number; y: number; radius: number; intensity: number }[];
+  maskUrls?: string[];
 }
 
 export interface FacialColorTone {
@@ -31,6 +32,14 @@ export interface ImageQualityCheck {
   feedback: string[];
 }
 
+export interface FaceAttributes {
+  faceShape: string; // e.g. "Oval", "Heart", "Round", "Square"
+  symmetryScore: number;
+  eyeDistanceRatio: number;
+  goldenRatioMatch: number;
+  jawlineType: string;
+}
+
 export interface SkinAnalysisResult {
   id: string;
   timestamp: string;
@@ -41,6 +50,7 @@ export interface SkinAnalysisResult {
   skinType: SkinType;
   fitzpatrick: FitzpatrickType;
   colorTone: FacialColorTone;
+  faceAttributes?: FaceAttributes;
   concerns: Record<string, SkinConcernMetric>;
   keyFindings: string[];
   recommendedFocus: string[];

@@ -5,6 +5,7 @@ import { RecommendationEngine } from '../../services/recommendationEngine';
 import { Modal } from '../common/Modal';
 import { ArrowLeftRight, Check, Sparkles } from 'lucide-react';
 import { Badge } from '../common/Badge';
+import { ProductImage } from '../common/ProductImage';
 
 interface ProductSubstitutionModalProps {
   isOpen: boolean;
@@ -29,93 +30,103 @@ export const ProductSubstitutionModal: React.FC<ProductSubstitutionModalProps> =
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={`Substitute Product for ${slot.slotName}`}
-      subtitle="Compare formulations, key actives, and live price delta"
+      title={`Choose Formula for ${slot.slotName}`}
+      subtitle="Compare key active ingredients, sizes, and price differences"
       maxWidth="2xl"
     >
-      <div className="space-y-4">
-        {/* Currently Assigned Product Anchor */}
+      <div className="space-y-5">
+        {/* Current Product Selection (if any) */}
         {currentProduct && (
-          <div className="p-3.5 rounded-xl border border-white/12 bg-editorial-card flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <img
-                src={currentProduct.imageUrl}
-                alt={currentProduct.name}
-                className="w-12 h-12 rounded-lg object-cover border border-white/10"
-              />
+          <div className="p-4 rounded-2xl border border-beauty-muted-border bg-beauty-cream/60 flex items-center justify-between">
+            <div className="flex items-center gap-3.5">
+              <div className="w-14 h-14 rounded-xl overflow-hidden border border-beauty-muted-border bg-white shrink-0">
+                <ProductImage
+                  product={currentProduct}
+                  className="w-full h-full"
+                  imageClassName="w-full h-full object-cover"
+                />
+              </div>
               <div>
-                <span className="text-2xs font-mono uppercase text-editorial-text-muted">
+                <span className="text-2xs uppercase tracking-wider text-beauty-muted font-medium">
                   Current Selection
                 </span>
-                <div className="text-xs font-bold text-white">
+                <div className="font-serif text-sm font-medium text-beauty-charcoal">
                   {currentProduct.brand} — {currentProduct.name}
                 </div>
-                <div className="text-2xs text-editorial-text-secondary mt-0.5">
-                  {currentProduct.keyActives.join(', ')}
+                <div className="text-xs text-beauty-muted mt-0.5">
+                  Actives: {currentProduct.keyActives.join(', ')} ({currentProduct.size})
                 </div>
               </div>
             </div>
-            <span className="font-mono text-sm font-bold text-white">
-              ₹{currentProduct.price.toLocaleString('en-IN')}
+            <span className="font-serif text-base font-medium text-beauty-charcoal shrink-0">
+              {currentProduct.price !== null && currentProduct.price !== undefined
+                ? `₹${currentProduct.price.toLocaleString('en-IN')}`
+                : 'Price on Google'}
             </span>
           </div>
         )}
 
         {/* Available Alternatives List */}
-        <div className="space-y-2.5 max-h-[50vh] overflow-y-auto pr-1">
-          <div className="text-2xs font-mono uppercase tracking-wider text-editorial-text-muted">
-            Available Compatible Substitutes ({substitutes.length})
+        <div className="space-y-3 max-h-[52vh] overflow-y-auto pr-1">
+          <div className="text-2xs uppercase tracking-wider text-beauty-muted font-semibold">
+            Compatible Alternatives ({substitutes.length})
           </div>
 
           {substitutes.length === 0 ? (
-            <div className="p-6 text-center text-xs text-editorial-text-muted">
+            <div className="p-8 text-center text-xs text-beauty-muted bg-beauty-cream/30 rounded-2xl">
               No additional alternatives found in this specific formulation category.
             </div>
           ) : (
             substitutes.map((sub) => {
-              const priceDiff = currentProduct ? sub.price - currentProduct.price : 0;
+              const hasPrices = currentProduct?.price !== null && currentProduct?.price !== undefined && sub.price !== null && sub.price !== undefined;
+              const priceDiff = hasPrices ? (sub.price! - currentProduct!.price!) : null;
+
               return (
                 <div
                   key={sub.id}
-                  className="p-3.5 rounded-xl border border-white/[0.08] bg-editorial-surface hover:border-editorial-lime/40 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                  className="p-4 rounded-2xl border border-beauty-muted-border bg-white hover:border-beauty-forest transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-beauty-sm"
                 >
-                  <div className="flex items-start gap-3">
-                    <img
-                      src={sub.imageUrl}
-                      alt={sub.name}
-                      className="w-12 h-12 rounded-lg object-cover border border-white/10 shrink-0"
-                    />
+                  <div className="flex items-start gap-3.5">
+                    <div className="w-14 h-14 rounded-xl overflow-hidden border border-beauty-muted-border shrink-0 bg-beauty-cream/20">
+                      <ProductImage
+                        product={sub}
+                        className="w-full h-full"
+                        imageClassName="w-full h-full object-cover"
+                      />
+                    </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-2xs font-semibold text-editorial-lime uppercase">
+                        <span className="text-2xs font-semibold text-beauty-sage uppercase tracking-wider">
                           {sub.brand}
                         </span>
                         {sub.isFragranceFree && (
-                          <span className="text-[10px] text-editorial-text-muted font-mono">
+                          <Badge variant="cream" size="sm">
                             Fragrance-Free
-                          </span>
+                          </Badge>
                         )}
                       </div>
-                      <div className="text-xs font-semibold text-white mt-0.5">
+                      <div className="font-serif text-sm font-medium text-beauty-charcoal mt-0.5">
                         {sub.name}
                       </div>
-                      <div className="text-2xs text-editorial-text-secondary mt-1">
-                        Actives: {sub.keyActives.join(', ')}
+                      <div className="text-xs text-beauty-muted mt-0.5">
+                        Actives: {sub.keyActives.join(', ')} ({sub.size})
                       </div>
                     </div>
                   </div>
 
                   {/* Price & Swap CTA */}
-                  <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2 shrink-0">
+                  <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-beauty-muted-border">
                     <div className="text-right">
-                      <div className="font-mono text-sm font-bold text-white">
-                        ₹{sub.price.toLocaleString('en-IN')}
+                      <div className="font-serif text-base font-medium text-beauty-charcoal">
+                        {sub.price !== null && sub.price !== undefined
+                          ? `₹${sub.price.toLocaleString('en-IN')}`
+                          : 'Price on Google'}
                       </div>
-                      {currentProduct && (
-                        <div className={`text-[10px] font-mono font-semibold ${
-                          priceDiff < 0 ? 'text-emerald-400' : priceDiff > 0 ? 'text-amber-400' : 'text-editorial-text-muted'
+                      {priceDiff !== null && (
+                        <div className={`text-2xs font-medium ${
+                          priceDiff < 0 ? 'text-beauty-forest' : priceDiff > 0 ? 'text-amber-700' : 'text-beauty-muted'
                         }`}>
-                          {priceDiff < 0 ? `-₹${Math.abs(priceDiff)}` : priceDiff > 0 ? `+₹${priceDiff}` : 'Same Price'}
+                          {priceDiff < 0 ? `-₹${Math.abs(priceDiff)} savings` : priceDiff > 0 ? `+₹${priceDiff}` : 'Same Price'}
                         </div>
                       )}
                     </div>
@@ -125,10 +136,10 @@ export const ProductSubstitutionModal: React.FC<ProductSubstitutionModalProps> =
                         onSelectProduct(sub);
                         onClose();
                       }}
-                      className="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-editorial-lime text-black hover:bg-editorial-lime-hover shadow-subtle-glow flex items-center gap-1.5 transition-all"
+                      className="px-4 py-2 text-xs font-medium rounded-xl bg-beauty-forest text-beauty-ivory hover:bg-beauty-forest/90 shadow-beauty-sm flex items-center gap-1.5 transition-all"
                     >
-                      <ArrowLeftRight className="w-3.5 h-3.5" />
-                      <span>Select Swap</span>
+                      <ArrowLeftRight className="w-3.5 h-3.5 text-beauty-lime" />
+                      <span>Select Formula</span>
                     </button>
                   </div>
                 </div>

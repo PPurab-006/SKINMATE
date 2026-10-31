@@ -1,149 +1,141 @@
-# SkinMate — AI Personal Beauty & Care Intelligence Platform
+# SkinMate 2.0 — Premium Personal Beauty, Care & Shopping Destination
 
-> **"Understand your appearance. Experiment with possibilities. Build your personal care routine."**
+> **"Your beauty. Your way."**  
+> Discover what works for you. Build routines, explore new looks and find products that fit your needs.
 
-SkinMate is an ambitious consumer beauty-tech web platform combining AI visual diagnostics, virtual try-on studios, biochemical ingredient compatibility checking, and budget-optimized product routines into a single cohesive experience.
-
----
-
-## 1. Visual & Editorial Identity
-
-- **Palette**: Deep charcoal surfaces (`#0A0B0D`, `#111317`, `#16181E`) accented with electric editorial lime (`#D4F83C`).
-- **Typography**: Editorial display headers set in *Syne* paired with high-precision UI body copy in *Plus Jakarta Sans*.
-- **Tactile Details**: Subtle glassmorphism (`backdrop-blur-md`), hairline borders (`rgba(255, 255, 255, 0.08)`), responsive micro-animations, and interactive split comparison sliders.
+SkinMate 2.0 is a complete redesign of the platform from a diagnostic AI workstation into an editorial beauty, personal-care, and lifestyle shopping destination. Inspired by contemporary beauty publications and luxury DTC shopping experiences (such as Violet Grey, Aesop, and Glossier), SkinMate puts consumer beauty first while preserving powerful intelligence underneath.
 
 ---
 
-## 2. Platform Architecture
+## 1. Design Philosophy & Visual Identity
 
-```
-skinmate/
-├── backend/                       # Python FastAPI S2S backend proxy
-│   ├── config.py                  # Environment settings & credentials
-│   ├── main.py                    # App entrypoint & CORS middleware
-│   ├── requirements.txt           # Python dependencies
-│   └── routers/
-│       ├── recommendations.py     # AI recommendation & structured schemas
-│       └── youcam.py              # S2S YouCam API upload, task & polling proxies
-├── src/
-│   ├── components/
-│   │   ├── common/                # Navbar, Footer, Badge, Modal, SplitSlider, CameraCapture, ImageDropzone
-│   │   ├── dashboard/             # PersonalDashboard, metrics strips, saved looks carousel
-│   │   ├── skin/                  # SkinLab, SkinConcernsVisualizer, heatmap overlay, before/after simulation
-│   │   ├── hair/                  # HairLab, wave pattern detection, porosity & density
-│   │   ├── style/                 # StyleStudio with 5 sub-studios (Hair, Beard, Makeup, Nails, Face)
-│   │   ├── routine/               # PCPartPicker-style RoutineBuilder, ProductSubstitutionModal, conflicts drawer
-│   │   ├── marketplace/           # Marketplace, ProductCard, ProductDetailModal, ProductCompareModal
-│   │   └── profile/               # UserProfile, formulation sensitivities, privacy & biometric purge
-│   ├── data/
-│   │   ├── mockAnalysis.ts        # Realistic dermal & follicle diagnostic baselines
-│   │   ├── mockPresets.ts         # Style presets for hair, beard, makeup, nails, face
-│   │   ├── mockProducts.ts        # India-first & international catalog with INR (₹) pricing
-│   │   ├── mockRoutines.ts        # Pre-configured morning, evening, hair, and beard regimens
-│   │   └── rules/
-│   │       └── ingredientRules.ts # PCPartPicker pairwise biochemical compatibility engine
-│   ├── services/
-│   │   ├── recommendationEngine.ts# Profile matching & budget optimization algorithms
-│   │   ├── storage.ts             # Safe LocalStorage persistence
-│   │   └── youcam/                # YouCam client, Live S2S service & neural mock adapters
-│   ├── types/                     # Complete TypeScript interfaces
-│   ├── App.tsx                    # Central application shell
-│   ├── index.css                  # Tailored Tailwind directives & design system
-│   └── main.tsx                   # React root entrypoint
-├── .env.example                   # Environment credentials template
-└── package.json
-```
+- **Consumer-First Aesthetic**: Replaces dark diagnostic telemetry and corporate AI dashboards with a warm, welcoming editorial layout.
+- **Editorial Color Palette**:
+  - **Warm Ivory** (`#F8F6F0`): Primary canvas foundation.
+  - **Soft Cream** (`#EFECE3`): Secondary card backgrounds and drawers.
+  - **Deep Forest** (`#243C32`): Elegant primary brand accents, dark contrast buttons, and active tabs.
+  - **Muted Sage** (`#A6B39A`): Botanical brand accents and category highlights.
+  - **Charcoal Typography** (`#252923`): High-legibility text contrast without stark black.
+  - **Muted Grey** (`#85877F`): Subtle secondary copy and border definition.
+  - **Restrained Lime Accent** (`#B4D836`): Used with disciplined restraint for subtle interactive highlights.
+- **Typography**:
+  - **Editorial Serif** (*Playfair Display*): Expressive headlines, editorial quotes, and product titles.
+  - **Modern Clean Sans** (*Plus Jakarta Sans*): Crisp, comfortable body copy and navigation.
+- **Authentic Imagery**: High-impact editorial portraiture and authentic product photography.
 
 ---
 
-## 3. Key Modules & Capabilities
+## 2. Platform Architecture & Navigation
 
-### A. Home / Personal Dashboard
-- Personalized greeting and appearance profile snapshot (Skin Type: Combination, Fitzpatrick: IV, Undertone: Warm Olive, Hair: 2B Wavy).
-- Diagnostic health scores (Skin Health Index: 84/100, Biological age: -2 years).
-- Active care routines summary with live price breakdown in INR.
-- Saved beauty looks gallery and quick launches to all intelligence modules.
+SkinMate 2.0 provides an intuitive 5-pillar consumer navigation:
 
-### B. Skin Lab
-- Dual input: Live WebRTC camera viewfinder with face oval alignment guidelines, or file upload with 1-click sample portraits.
-- Image quality validation checklist (illumination, centering, resolution).
-- AI diagnostic breakdown across 8 dermal dimensions: Pores, Spots/Hyperpigmentation, Wrinkles, Texture, Redness, Moisture, Oiliness, and Dark Circles.
-- Interactive facial heatmap visualizer placing coordinate markers on the user's selfie.
-- 4-week, 8-week, and 12-week predictive simulation with an interactive draggable before/after split slider.
-- Fitzpatrick Phototype Scale (Type IV) and chromophore undertone analysis.
+1. **Home (`/home`)**:
+   - Hero: *"Your beauty. Your way."* with spacious lifestyle photography and primary call-to-actions.
+   - Three editorial entry points: *Skin & Skincare*, *Hair & Haircare*, and *Beauty & Grooming*.
+   - Personal vanity routine preview (AM/PM sequence with onboarding state when unconfigured).
+   - Curated product discovery showcase with verified Indian retail pricing (INR ₹).
+   - Editorial inspiration lookbook grid with instant try-on launchers.
 
-### C. Hair Lab
-- Wave pattern classification (Type 2B Wavy).
-- Cuticle porosity, length detection (~34 cm), and follicle density (194 hairs/cm²).
-- Cuticle alignment and humidity frizz susceptibility metrics.
-- Targeted active protocols (Disulfide bond repair, cold-pressed argan lipid seal).
+2. **Discover (`/discover`)**:
+   - Welcoming, approachable skin and hair consultations (no clinical intimidation).
+   - 6-step guided experience: Introduction → Photo Capture/Upload → Lighting & Angle Quality Check → Gentle Analysis → Plain-English Findings → Tailored Routine Recommendations.
+   - Interactive split before/after visualizer.
+   - Clear distinction between live consultations and demonstration sample data.
 
-### D. Style Studio
-Experimentation workspace featuring 5 dedicated studios:
-1. **Hair Studio**: Hairstyle VTO (French Bob, Curtain Bangs, Beach Waves, Pixie, Liquid Silk) & Balayage hair coloring.
-2. **Beard Studio**: Designer stubble, short boxed beard, sculpted balbo, and natural full beard.
-3. **Makeup Studio**: Complete look transfer (Editorial Sunlit Bronze, Parisienne Crimson, Golden Hour Glow, Tokyo Cyberpunk) with lipstick, blush, and eyeliner palettes.
-4. **Nail Studio**: Almond, Square, and Oval shapes with Glazed Chrome, Velvet Bordeaux, and Nordic Sage finishes.
-5. **Face Studio**: Golden ratio anatomical proportion mapping, AI enamel whitening, and smile harmonization.
-- Features real-time split comparisons, intensity sliders, and "Save Look to Profile".
+3. **My Routine (`/routine`)**:
+   - Assembles like a personal luxury vanity cabinet rather than a database table.
+   - Four dedicated regimens: Morning Skincare (AM), Evening Skincare (PM), Haircare, Grooming & Beard.
+   - Step sequence with high-resolution imagery, actives, and prices.
+   - Interactive Target Budget slider and one-click smart cost optimization.
+   - Formula Harmony & Pairing notes explaining complementary actives in plain English.
+   - Full product substitution modal with live price deltas.
 
-### E. My Care / Routine Builder (PCPartPicker for Personal Care)
-- Configures 4 distinct regimens: Morning (AM) Skincare, Evening (PM) Skincare, Haircare, and Grooming/Beard.
-- **Biochemical Conflict Engine**: Real-time evaluation of clinical active pairings:
-  - *Conflict Alert*: Flags harmful combinations like Retinoids + AHA/BHA (barrier disruption risk).
-  - *Caution Flag*: Low-pH Vitamin C + Niacinamide flushing alerts.
-  - *Synergy Detected*: Gold-standard pairings like Hyaluronic Acid + Ceramides (lipid barrier hydration lock).
-- **Live Budget Meter**: Dynamic INR total calculation, target budget limit slider, and progress bar.
-- **Auto-Optimize Budget**: Intelligently swaps expensive items for clinically equivalent affordable alternatives to get under target budget with 1 click.
-- **Product Substitution**: Clicking "Substitute" opens a side-by-side drawer displaying alternative formulas, active ingredient diffs, and exact price deltas (+₹200 / -₹450).
+4. **Beauty Studio (`/studio`)**:
+   - Visual-first experimentation space with 5 creative studios: Hairstyles, Hair Colors, Beard Grooming, Makeup Looks, and Nail Finishes.
+   - Live split-screen slider comparison.
+   - Portrait switcher to upload custom photos or capture live camera selfies.
+   - Personal lookbook saving with custom titles.
 
-### F. Product Marketplace
-- Vetted catalogue featuring real products and verifiable INR pricing from brands like Minimalist, Dot & Key, The Derma Co, CeraVe, COSRX, Olaplex, Bare Anatomy, Bombay Shaving Company, Beardo, Maybelline, and Nykaa Cosmetics.
-- Deep category filtering, instant search across actives, and sorting (Match %, Price, Rating).
-- **Product Detail Modal**: Full INCI ingredients formulation breakdown, pH values, textures, and direct retailer purchase links (Nykaa, Amazon India, Brand official).
-- **Side-by-Side Comparison**: Compare up to 3 formulations simultaneously.
+5. **Shop (`/shop`)**:
+   - High-end beauty e-commerce marketplace featuring vetted Indian (Minimalist, Dot & Key, The Derma Co, Nykaa, Bare Anatomy) and international brands (CeraVe, COSRX, Olaplex).
+   - Multi-category pills, keyword search by brand/active botanical, and sorting.
+   - Full INCI formulation drawer with pH and texture indicators.
+   - Side-by-side formulation comparison modal (up to 3 items).
 
-### G. My Profile & Privacy
-- Personal appearance profile, formulation preferences (Fragrance-free, Cruelty-free), and budget tiers.
-- Granular privacy controls: Local-only storage toggle, telemetry opt-out.
-- One-click permanent biometric data deletion modal.
+6. **Profile (`/profile`)**:
+   - Discrete profile and preferences manager.
+   - Zero hardcoded identities or fake biological ages.
+   - Ethical formulation filters: Fragrance-Free only, Cruelty-Free certified, and custom budget tiers.
+   - Ingredient sensitivities tracker (flags matching formulas across routines).
+   - Local privacy assurance with full one-click data reset.
 
 ---
 
-## 4. YouCam API Integration & Sandbox Safety
+## 3. Technology Stack
 
-To ensure zero waste of developer quota during evaluation:
-- The platform includes both a **Live Production S2S Adapter** (`https://yce-api-01.makeupar.com`) and a **High-Fidelity Neural Sandbox Mock Adapter**.
-- The top navigation bar features a visible status indicator: `[Sandbox Mode - 1,000 Units]` vs `[YouCam Live API]`.
-- Clicking the indicator opens the API Configuration modal, allowing users to enter a Bearer key or toggle Sandbox mode without touching source code.
+- **Frontend**: React 18, TypeScript, Tailwind CSS, Lucide React, Google Fonts (*Playfair Display* & *Plus Jakarta Sans*).
+- **Tooling & Build**: Vite, PostCSS, Autoprefixer.
+- **Backend Service**: Python 3 FastAPI S2S backend proxy (`backend/`) handling YouCam API requests, server-side authentication, image transfers, and recommendations.
+- **Rules Engine**: Pairwise biochemical compatibility checking (`src/data/rules/ingredientRules.ts`) evaluating active interactions (e.g. Retinol + AHA/BHA, Vitamin C + Retinol) into human-friendly pairing guidance.
+- **Data Persistence**: Privacy-centric `LocalStorage` caching for offline routines and saved looks.
 
 ---
 
-## 5. Running the Application
+## 4. Local Development
 
-### Frontend (Vite + React + TypeScript)
+### Prerequisites
+- Node.js 18+ & npm
+- Python 3.10+ (for backend proxy)
+
+### Frontend
 ```bash
-# 1. Install dependencies
+# Install dependencies
 npm install
 
-# 2. Run local development server
+# Start Vite dev server
 npm run dev
 
-# 3. Production build
+# Build production bundle
 npm run build
 ```
-Access the application at: `http://localhost:5173`
 
-### Backend (Python FastAPI)
+### Backend Proxy (Optional for S2S Live API)
 ```bash
-# 1. Setup virtual environment
-python3 -m venv backend/venv
-source backend/venv/bin/activate
-
-# 2. Install dependencies
-pip install -r backend/requirements.txt
-
-# 3. Run FastAPI server
-uvicorn backend.main:app --port 8000 --reload
+cd backend
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+uvicorn main:app --reload --port 8000
 ```
-API Documentation available at: `http://localhost:8000/docs`
+
+---
+
+## 5. Deployment on Render
+
+SkinMate is production-ready for deployment on [Render](https://render.com) using either the included multi-stage `Dockerfile` or Render Blueprints (`render.yaml`).
+
+### Option 1: 1-Click Render Blueprint (Recommended)
+1. Fork or push this repository to GitHub.
+2. In the Render Dashboard, click **New +** → **Blueprint**.
+3. Connect your repository. Render will automatically read `render.yaml` and deploy SkinMate as a unified full-stack service with auto-deploy enabled.
+
+### Option 2: Web Service (Docker)
+1. In Render, select **New +** → **Web Service**.
+2. Connect your repository.
+3. Select **Docker** as the runtime.
+4. Set Environment Variables:
+   - `PORT`: `8000`
+   - `YOUCAM_MOCK_MODE`: `true` (or set `false` with your live YouCam API keys)
+   - `YOUCAM_BASE_URL`: `https://yce-api-01.makeupar.com`
+5. Click **Create Web Service**.
+
+---
+
+## 6. Official Hackathon Demo Video & Assets
+
+- **Official Demo Video**: [`SkinMate_Hackathon_Demo.mp4`](SkinMate_Hackathon_Demo.mp4) (1080p Full HD, 2m 44s, H.264 / AAC)
+- **YouTube Thumbnail**: [`SkinMate_Demo_Thumbnail.png`](SkinMate_Demo_Thumbnail.png) (1920×1080)
+- **Production & QA Report**: [`SkinMate_Demo_Production_Report.md`](SkinMate_Demo_Production_Report.md)
+- **Visual Contact Sheet**: [`demo_contact_sheet.png`](demo_contact_sheet.png)
+- **Voiceover Master**: [`SkinMate_Demo_Voiceover.wav`](SkinMate_Demo_Voiceover.wav) (48 kHz stereo PCM)
+

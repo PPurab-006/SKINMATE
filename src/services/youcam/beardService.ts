@@ -2,21 +2,14 @@ import { youCamClient } from './client';
 import { YouCamMockAdapter } from './mockAdapter';
 
 export class BeardService {
-  public static async applyBeardStyle(baseImageUrl: string, beardStyleId: string): Promise<string> {
-    const config = youCamClient.getConfig();
-    if (config.isMockMode || !config.apiKey) {
-      const res = await YouCamMockAdapter.generateStylePreview(baseImageUrl, 'beard', beardStyleId);
-      return res.styledImageUrl;
-    }
-
-    try {
-      const taskRes = await youCamClient.createTask('beard-style', 'file-ref', { style_id: beardStyleId });
-      await youCamClient.pollTaskResult('beard-style', taskRes.task_id);
-      const res = await YouCamMockAdapter.generateStylePreview(baseImageUrl, 'beard', beardStyleId);
-      return res.styledImageUrl;
-    } catch {
-      const res = await YouCamMockAdapter.generateStylePreview(baseImageUrl, 'beard', beardStyleId);
-      return res.styledImageUrl;
-    }
+  public static async applyBeardStyle(baseImageUrl: string, beardStyleId: string, fileId: string = 'portrait-base'): Promise<string> {
+    const vto = await youCamClient.applyVto({
+      fileId,
+      category: 'beard',
+      serviceSlug: 'beard-style',
+      effectId: beardStyleId,
+      imageUrl: baseImageUrl,
+    });
+    return vto.styled_image_url || baseImageUrl;
   }
 }

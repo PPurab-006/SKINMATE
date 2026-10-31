@@ -48,39 +48,39 @@ export const Modal: React.FC<ModalProps> = ({
       {/* Backdrop */}
       <div
         onClick={onClose}
-        className="fixed inset-0 bg-black/80 backdrop-blur-md transition-opacity"
+        className="fixed inset-0 bg-[#1A2520]/60 backdrop-blur-sm transition-opacity"
       />
 
       {/* Modal Dialog Card */}
       <div
-        className={`relative w-full ${maxWidthStyles[maxWidth]} rounded-2xl border border-white/12 bg-editorial-surface shadow-modal-dark z-10 overflow-hidden flex flex-col max-h-[90vh] my-auto`}
+        className={`relative w-full ${maxWidthStyles[maxWidth]} rounded-3xl border border-beauty-muted-border bg-[#FDFCF9] shadow-beauty-modal z-10 overflow-hidden flex flex-col max-h-[90vh] my-auto`}
       >
         {/* Header */}
         {(title || subtitle) && (
-          <div className="px-6 py-5 border-b border-white/[0.08] flex items-center justify-between">
+          <div className="px-6 py-5 border-b border-beauty-muted-border bg-beauty-cream/50 flex items-center justify-between">
             <div>
               {title && (
-                <h3 className="font-display font-semibold text-lg text-editorial-text-primary">
+                <h3 className="font-serif font-semibold text-xl text-beauty-charcoal-heading">
                   {title}
                 </h3>
               )}
               {subtitle && (
-                <p className="text-xs text-editorial-text-secondary mt-0.5">
+                <p className="text-xs text-beauty-muted mt-0.5">
                   {subtitle}
                 </p>
               )}
             </div>
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg text-editorial-text-secondary hover:text-white hover:bg-white/[0.06] transition-colors"
+              className="p-2 rounded-full text-beauty-muted hover:text-beauty-charcoal hover:bg-beauty-cream transition-colors"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
           </div>
         )}
 
         {/* Content Body */}
-        <div className="p-6 overflow-y-auto">
+        <div className="p-6 overflow-y-auto bg-[#FDFCF9]">
           {children}
         </div>
       </div>

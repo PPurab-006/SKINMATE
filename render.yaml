@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: skinmate
+    runtime: docker
+    plan: free
+    region: oregon
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: YOUCAM_MOCK_MODE
+        value: "true"
+      - key: YOUCAM_BASE_URL
+        value: https://yce-api-01.makeupar.com

@@ -23,10 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 
-# Environment
+# Environment & Secrets
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
 
 # Python
 __pycache__/
@@ -37,3 +37,13 @@ backend/venv/
 env/
 venv/
 ENV/
+
+# Intermediate Production & Scratch Renders
+demo-production/renders/
+demo-production/assets/voiceover/SkinMate_Demo_Voiceover.wav
+video-production/renders/
+video-production/assets/footage/
+video-production/segments/
+video-production/temp/
+video-production/*.mp4
+SkinMate_Production_Project

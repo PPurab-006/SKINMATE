@@ -2,13 +2,42 @@ import { SkinAnalysisResult } from '../types/skin';
 import { HairAnalysisResult } from '../types/hair';
 import { UserAppearanceProfile } from '../types/profile';
 
-export const INITIAL_SKIN_ANALYSIS: SkinAnalysisResult = {
-  id: 'skin-eval-101',
-  timestamp: 'Today, 09:42 AM',
+/**
+ * Clean default initial user profile (zero fake names or fabricated scores)
+ */
+export const DEFAULT_USER_PROFILE: UserAppearanceProfile = {
+  hasCompletedSkinConsultation: false,
+  hasCompletedHairConsultation: false,
+  isSampleProfile: false,
+  preferences: {
+    budgetTier: '₹2,000 - ₹5,000',
+    preferredFinish: 'Natural',
+    crueltyFreeOnly: false,
+    fragranceFreeOnly: false,
+    targetRoutineBudget: 3500
+  },
+  privacy: {
+    storeImagesLocally: true,
+    allowDiagnosticTelemetry: false,
+    cloudSyncEnabled: false
+  },
+  savedProductIds: [],
+  savedLooks: [],
+  savedRoutines: [],
+  skinHistory: [],
+  hairHistory: []
+};
+
+/**
+ * Verified sample demonstration baseline (clearly flagged as demonstration data)
+ */
+export const SAMPLE_SKIN_ANALYSIS: SkinAnalysisResult = {
+  id: 'sample-skin-demo',
+  timestamp: 'Demonstration Baseline',
   imageUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80',
-  skinAge: 26,
-  chronologicalAge: 28,
-  overallScore: 84,
+  skinAge: 27,
+  chronologicalAge: 27,
+  overallScore: 82,
   skinType: 'Combination',
   fitzpatrick: 'IV',
   colorTone: {
@@ -16,16 +45,16 @@ export const INITIAL_SKIN_ANALYSIS: SkinAnalysisResult = {
     undertone: 'Olive',
     contrast: 'Medium',
     melaninIndex: 44,
-    seasonPalette: 'Warm Autumn / Earth Muted'
+    seasonPalette: 'Warm Autumn Earth Tones'
   },
   concerns: {
     pores: {
       id: 'pores',
-      name: 'Pore Congestion',
-      score: 72,
+      name: 'Pore & Sebum Balance',
+      score: 74,
       severity: 'moderate',
-      description: 'Localized follicular dilation observed across nasal bridge and central medial cheeks with light sebum oxidation.',
-      affectedRegions: ['Nasal Bridge', 'Medial Cheeks', 'Chin Crease'],
+      description: 'Mild shine observed along the nose bridge and forehead T-zone. Pores respond well to gentle daily niacinamide balance.',
+      affectedRegions: ['Nose Bridge', 'Medial Cheeks'],
       heatmapCoordinates: [
         { x: 50, y: 52, radius: 24, intensity: 0.65 },
         { x: 42, y: 56, radius: 18, intensity: 0.45 },
@@ -34,11 +63,11 @@ export const INITIAL_SKIN_ANALYSIS: SkinAnalysisResult = {
     },
     spots: {
       id: 'spots',
-      name: 'Hyperpigmentation & Spots',
-      score: 81,
+      name: 'Tone Evenness & Marks',
+      score: 80,
       severity: 'low',
-      description: 'Subtle post-inflammatory erythema (PIE) and localized melanocytic clusters on lateral cheek plane.',
-      affectedRegions: ['Lateral Cheeks', 'Upper Zygomatic Arch'],
+      description: 'Minor sun-induced freckling and post-blemish marks on outer cheeks. Benefits from regular Vitamin C and sunscreen.',
+      affectedRegions: ['Outer Cheeks'],
       heatmapCoordinates: [
         { x: 34, y: 58, radius: 15, intensity: 0.55 },
         { x: 67, y: 60, radius: 14, intensity: 0.48 }
@@ -46,11 +75,11 @@ export const INITIAL_SKIN_ANALYSIS: SkinAnalysisResult = {
     },
     wrinkles: {
       id: 'wrinkles',
-      name: 'Fine Lines & Wrinkles',
-      score: 92,
+      name: 'Elasticity & Expression Lines',
+      score: 91,
       severity: 'low',
-      description: 'Minimal superficial dynamic expression lines along lateral periorbital quadrant. Cellular elasticity is robust.',
-      affectedRegions: ['Outer Eye Canthus'],
+      description: 'Skin elasticity is supple and resilient. Subtle expression lines around the outer eye area.',
+      affectedRegions: ['Outer Eye Contours'],
       heatmapCoordinates: [
         { x: 28, y: 46, radius: 12, intensity: 0.25 },
         { x: 72, y: 46, radius: 12, intensity: 0.25 }
@@ -58,22 +87,22 @@ export const INITIAL_SKIN_ANALYSIS: SkinAnalysisResult = {
     },
     texture: {
       id: 'texture',
-      name: 'Stratum Texture Evenness',
-      score: 84,
+      name: 'Surface Smoothness',
+      score: 85,
       severity: 'low',
-      description: 'Smooth corneal surface with mild keratinized flaking around the perioral commissures.',
-      affectedRegions: ['Perioral Border'],
+      description: 'Even skin surface with minor dryness around the corners of the mouth.',
+      affectedRegions: ['Jawline Border'],
       heatmapCoordinates: [
         { x: 50, y: 72, radius: 20, intensity: 0.35 }
       ]
     },
     redness: {
       id: 'redness',
-      name: 'Micro-Vascular Redness',
+      name: 'Calmness & Redness',
       score: 88,
       severity: 'low',
-      description: 'Calm micro-capillary state with negligible diffuse erythema. Barrier resilience is intact.',
-      affectedRegions: ['Alar Crease'],
+      description: 'Skin is calm with negligible flushed redness. Barrier integrity is strong.',
+      affectedRegions: ['Cheeks'],
       heatmapCoordinates: [
         { x: 46, y: 55, radius: 10, intensity: 0.30 },
         { x: 54, y: 55, radius: 10, intensity: 0.30 }
@@ -81,11 +110,11 @@ export const INITIAL_SKIN_ANALYSIS: SkinAnalysisResult = {
     },
     moisture: {
       id: 'moisture',
-      name: 'Epidermal Hydration',
-      score: 75,
+      name: 'Hydration Retention',
+      score: 76,
       severity: 'moderate',
-      description: 'Mild sub-surface trans-epidermal moisture depletion in cheek zones contrasting with sebum-rich T-zone.',
-      affectedRegions: ['Lower Cheeks', 'Jawline'],
+      description: 'Cheek areas benefit from an extra layer of ceramide cream to lock in moisture during seasonal weather shifts.',
+      affectedRegions: ['Lower Cheeks'],
       heatmapCoordinates: [
         { x: 36, y: 68, radius: 25, intensity: 0.60 },
         { x: 64, y: 68, radius: 25, intensity: 0.60 }
@@ -93,23 +122,22 @@ export const INITIAL_SKIN_ANALYSIS: SkinAnalysisResult = {
     },
     oiliness: {
       id: 'oiliness',
-      name: 'Sebum Balance',
-      score: 68,
+      name: 'T-Zone Activity',
+      score: 70,
       severity: 'moderate',
-      description: 'Active lipid secretion concentrated in the frontal forehead and nasal T-zone region.',
-      affectedRegions: ['Forehead Center', 'Nose Bridge'],
+      description: 'Natural sebum output is concentrated in the forehead and central nose.',
+      affectedRegions: ['Forehead', 'Nose'],
       heatmapCoordinates: [
-        { x: 50, y: 32, radius: 30, intensity: 0.72 },
-        { x: 50, y: 52, radius: 20, intensity: 0.68 }
+        { x: 50, y: 32, radius: 30, intensity: 0.72 }
       ]
     },
     darkCircles: {
       id: 'darkCircles',
-      name: 'Periorbital Tone (Dark Circles)',
-      score: 79,
+      name: 'Under-Eye Brightness',
+      score: 80,
       severity: 'low',
-      description: 'Mild vascular shadows in lower tear trough with mild melanin shadowing.',
-      affectedRegions: ['Infraorbital Trough'],
+      description: 'Subtle shadows under the eyes. Responds well to caffeine serums and ample sleep.',
+      affectedRegions: ['Under-Eye Contours'],
       heatmapCoordinates: [
         { x: 38, y: 48, radius: 16, intensity: 0.50 },
         { x: 62, y: 48, radius: 16, intensity: 0.50 }
@@ -117,14 +145,14 @@ export const INITIAL_SKIN_ANALYSIS: SkinAnalysisResult = {
     }
   },
   keyFindings: [
-    'Optimal cellular turnover: Skin age reads 2 years younger than chronological age.',
-    'Combination lipid profile: T-zone displays 38% higher sebum output than lateral cheek planes.',
-    'Fitzpatrick Type IV: High melanin resilience against UVB, with elevated susceptibility to post-acne marks (PIH).'
+    'Balanced combination skin with naturally resilient barrier structure.',
+    'Forehead and nose benefit from lightweight sebum-regulating hydrators like Niacinamide.',
+    'Fitzpatrick IV tone offers good natural sun defense, but is prone to mild marks that benefit from broad-spectrum SPF 50.'
   ],
   recommendedFocus: [
-    'Gentle Niacinamide + Zinc buffering for T-zone pore refinement',
-    'Ceramide barrier replenishment for lower cheek moisture deficit',
-    'Broad-Spectrum PA++++ daily defense to prevent pigment oxidation'
+    'Gentle foaming cleanser with salicylic or oat extract',
+    'Hydrating barrier moisturizer with ceramides and hyaluronic acid',
+    'Daily invisible SPF 50 sunscreen protection'
   ],
   simulationPreviews: {
     weeks4: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80',
@@ -133,9 +161,12 @@ export const INITIAL_SKIN_ANALYSIS: SkinAnalysisResult = {
   }
 };
 
-export const INITIAL_HAIR_ANALYSIS: HairAnalysisResult = {
-  id: 'hair-eval-201',
-  timestamp: 'Yesterday, 04:15 PM',
+/**
+ * Verified sample hair demonstration baseline
+ */
+export const SAMPLE_HAIR_ANALYSIS: HairAnalysisResult = {
+  id: 'sample-hair-demo',
+  timestamp: 'Demonstration Baseline',
   imageUrl: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=80',
   pattern: '2B Wavy',
   length: {
@@ -143,9 +174,9 @@ export const INITIAL_HAIR_ANALYSIS: HairAnalysisResult = {
     estimatedCm: 34
   },
   frizziness: {
-    score: 68,
+    score: 70,
     level: 'Moderate',
-    cuticleAlignmentPct: 66
+    cuticleAlignmentPct: 68
   },
   density: {
     score: 82,
@@ -155,85 +186,30 @@ export const INITIAL_HAIR_ANALYSIS: HairAnalysisResult = {
   scalpProfile: {
     type: 'Balanced',
     porosity: 'Medium',
-    moistureRetention: 72,
+    moistureRetention: 74,
     damageLevel: 'Minimal'
   },
   keyFindings: [
-    'Type 2B defined S-wave structure with pronounced natural volume.',
-    'Cuticle porosity is optimal medium; cuticle scales open slightly in ambient humidity causing mid-length flyaways.',
-    'Healthy follicle root count: 194 strands per cm².'
+    'Defined 2B wavy hair structure with natural movement.',
+    'Medium porosity: cuticle responds well to moisture but needs sealing oils to prevent humidity flyaways.',
+    'Naturally healthy strand density across the scalp.'
   ],
   recommendedTreatments: [
     {
       title: 'Disulfide Linkage Maintenance',
       focus: 'Bond Repair',
-      activeIngredients: ['Maleic Acid', 'Arginine Complex'],
-      benefit: 'Fortifies internal keratin chains against mechanical styling tension.'
+      activeIngredients: ['Maleic Acid Complex', 'Amino Acids'],
+      benefit: 'Strengthens internal hair structure against heat and styling tension.'
     },
     {
-      title: 'Lipid Moisture Lock',
+      title: 'Cuticle Humidity Shield',
       focus: 'Anti-Frizz Smoothing',
-      activeIngredients: ['Cold-Pressed Argan Oil', 'Jojoba Wax Esters'],
-      benefit: 'Forms a hydrophobic micro-film to seal the outer cuticle against monsoonal humidity.'
+      activeIngredients: ['Cold-Pressed Argan Oil', 'Jojoba Oil'],
+      benefit: 'Seals moisture inside the hair shaft to prevent humidity frizz.'
     }
   ]
 };
 
-export const DEFAULT_USER_PROFILE: UserAppearanceProfile = {
-  name: 'Devika Sharma',
-  avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
-  age: 28,
-  genderIdentity: 'Female',
-  skin: {
-    type: 'Combination',
-    fitzpatrick: 'IV',
-    colorTone: {
-      dominantHex: '#C59572',
-      undertone: 'Olive',
-      contrast: 'Medium',
-      melaninIndex: 44,
-      seasonPalette: 'Warm Autumn / Earth Muted'
-    },
-    primaryConcerns: ['T-Zone Pores', 'Mild Dehydration', 'Post-Acne Spots'],
-    allergies: ['Synthetic Fragrance / Cinnamic Aldehyde']
-  },
-  hair: {
-    pattern: '2B Wavy',
-    porosity: 'Medium',
-    scalpType: 'Balanced',
-    lengthCategory: 'Collarbone (34 cm)',
-    primaryConcerns: ['Humidity Frizz', 'Curl Definition']
-  },
-  preferences: {
-    budgetTier: 'Balanced Quality (₹2,000 - ₹5,000)',
-    preferredFinish: 'Dewy / Glass Skin',
-    crueltyFreeOnly: true,
-    fragranceFreeOnly: true,
-    targetRoutineBudget: 3500
-  },
-  privacy: {
-    storeImagesLocally: true,
-    allowDiagnosticTelemetry: false,
-    cloudSyncEnabled: true
-  },
-  savedProductIds: ['prod-serum-01', 'prod-moist-01', 'prod-spf-01', 'prod-hair-01'],
-  savedLooks: [
-    {
-      id: 'look-golden-hour',
-      title: 'Editorial Bronze & Soft Waves',
-      date: 'Oct 28, 2026',
-      baseImageUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
-      styledImageUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80',
-      studioCategory: 'makeup',
-      appliedOptions: [
-        { name: 'Look Preset', details: 'Golden Hour Glow' },
-        { name: 'Lip Finish', details: 'Matte Rosewood' },
-        { name: 'Hairstyle', details: 'Textured Curtain Waves' }
-      ],
-      favorite: true
-    }
-  ],
-  savedRoutines: [],
-  skinHistory: [INITIAL_SKIN_ANALYSIS],
-  hairHistory: [INITIAL_HAIR_ANALYSIS]
-};
+// Aliases for compatibility
+export const INITIAL_SKIN_ANALYSIS = SAMPLE_SKIN_ANALYSIS;
+export const INITIAL_HAIR_ANALYSIS = SAMPLE_HAIR_ANALYSIS;

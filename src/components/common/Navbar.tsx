@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { 
   Sparkles, 
-  Layers, 
-  Scissors, 
-  Palette, 
-  SlidersHorizontal, 
-  ShoppingBag, 
-  User, 
   Menu, 
   X, 
   Key, 
-  ShieldCheck, 
-  Cpu 
+  ShoppingBag, 
+  User, 
+  SlidersHorizontal,
+  Compass,
+  Palette,
+  Home,
+  ShieldCheck,
+  Cpu,
+  Bookmark
 } from 'lucide-react';
 import { AppTab } from '../../types/common';
 import { UserAppearanceProfile } from '../../types/profile';
@@ -25,6 +26,7 @@ interface NavbarProps {
   profile: UserAppearanceProfile;
   isMockMode: boolean;
   onToggleMockMode: (enabled: boolean) => void;
+  savedRoutinesCount?: number;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -32,21 +34,22 @@ export const Navbar: React.FC<NavbarProps> = ({
   onTabChange,
   profile,
   isMockMode,
-  onToggleMockMode
+  onToggleMockMode,
+  savedRoutinesCount = 0
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isApiModalOpen, setIsApiModalOpen] = useState(false);
   const [apiKeyInput, setApiKeyInput] = useState(youCamClient.getConfig().apiKey || '');
   const [units] = useState(youCamClient.getConfig().remainingUnits);
 
-  const navItems: { id: AppTab; label: string; icon: React.ReactNode; badge?: string }[] = [
-    { id: 'dashboard', label: 'Dashboard', icon: <Layers className="w-4 h-4" /> },
-    { id: 'skin-lab', label: 'Skin Lab', icon: <Sparkles className="w-4 h-4" /> },
-    { id: 'hair-lab', label: 'Hair Lab', icon: <Scissors className="w-4 h-4" /> },
-    { id: 'style-studio', label: 'Style Studio', icon: <Palette className="w-4 h-4" /> },
-    { id: 'routine-builder', label: 'My Care', icon: <SlidersHorizontal className="w-4 h-4" />, badge: 'Builder' },
-    { id: 'marketplace', label: 'Marketplace', icon: <ShoppingBag className="w-4 h-4" /> },
-    { id: 'profile', label: 'Profile', icon: <User className="w-4 h-4" /> },
+  const navLinks: { id: AppTab; label: string; icon: React.ReactNode }[] = [
+    { id: 'home', label: 'Home', icon: <Home className="w-4 h-4" /> },
+    { id: 'skin-hair', label: 'My Skin & Hair', icon: <Sparkles className="w-4 h-4" /> },
+    { id: 'for-you', label: 'For You', icon: <Compass className="w-4 h-4" /> },
+    { id: 'shop', label: 'Discover & Shop', icon: <ShoppingBag className="w-4 h-4" /> },
+    { id: 'lists', label: 'My Lists', icon: <Bookmark className="w-4 h-4" /> },
+    { id: 'routine', label: 'My Routine', icon: <SlidersHorizontal className="w-4 h-4" /> },
+    { id: 'studio', label: 'Beauty Studio', icon: <Palette className="w-4 h-4" /> },
   ];
 
   const handleSaveApiKey = () => {
@@ -59,111 +62,96 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full border-b border-white/[0.08] bg-editorial-bg/85 backdrop-blur-xl transition-all">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
-          {/* Logo & Brand Identity */}
-          <div className="flex items-center gap-8">
-            <button
-              onClick={() => onTabChange('dashboard')}
-              className="flex items-center gap-2.5 text-left group"
-            >
-              <div className="w-9 h-9 rounded-xl bg-editorial-lime/10 border border-editorial-lime/30 flex items-center justify-center text-editorial-lime shadow-subtle-glow group-hover:scale-105 transition-transform">
-                <Sparkles className="w-5 h-5" />
-              </div>
-              <div className="flex flex-col">
-                <div className="flex items-center gap-1.5 font-display font-bold text-lg tracking-tight text-white group-hover:text-editorial-lime transition-colors">
-                  <span>SKINMATE</span>
-                  <span className="text-[10px] uppercase font-mono px-1.5 py-0.2 bg-editorial-lime/20 text-editorial-lime rounded font-bold">
-                    AI
-                  </span>
-                </div>
-                <span className="text-2xs font-mono tracking-widest text-editorial-text-muted uppercase">
-                  Personal Care Intelligence
-                </span>
-              </div>
-            </button>
+      <header className="sticky top-0 z-40 w-full border-b border-beauty-muted-border bg-[#F8F6F0]/90 backdrop-blur-md transition-all">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+          
+          {/* Brand Logo */}
+          <button
+            onClick={() => onTabChange('home')}
+            className="flex items-center gap-3 text-left group"
+          >
+            <div className="w-9 h-9 rounded-full bg-beauty-forest text-beauty-ivory flex items-center justify-center font-serif text-lg font-bold shadow-2xs group-hover:scale-105 transition-transform">
+              S
+            </div>
+            <div className="flex flex-col">
+              <span className="font-serif font-bold text-xl sm:text-2xl tracking-tight text-beauty-charcoal-heading group-hover:text-beauty-forest transition-colors">
+                SkinMate
+              </span>
+              <span className="text-[10px] tracking-widest uppercase font-medium text-beauty-muted -mt-0.5">
+                Personal Beauty &amp; Care
+              </span>
+            </div>
+          </button>
 
-            {/* Desktop Navigation Links */}
-            <nav className="hidden lg:flex items-center gap-1">
-              {navItems.map((item) => {
-                const isActive = activeTab === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => onTabChange(item.id)}
-                    className={`relative flex items-center gap-2 px-3.5 py-2 text-xs font-medium rounded-lg transition-all duration-200 ${
-                      isActive
-                        ? 'text-white bg-white/[0.06] font-semibold'
-                        : 'text-editorial-text-secondary hover:text-editorial-text-primary hover:bg-white/[0.03]'
-                    }`}
-                  >
-                    <span className={isActive ? 'text-editorial-lime' : 'text-editorial-text-muted'}>
-                      {item.icon}
-                    </span>
-                    <span>{item.label}</span>
-                    {item.badge && (
-                      <span className="text-2xs font-mono px-1.5 py-0.5 rounded bg-editorial-lime/15 text-editorial-lime uppercase font-semibold">
-                        {item.badge}
-                      </span>
-                    )}
-                    {isActive && (
-                      <span className="absolute bottom-0 inset-x-3.5 h-0.5 bg-editorial-lime rounded-full" />
-                    )}
-                  </button>
-                );
-              })}
-            </nav>
-          </div>
+          {/* Primary Consumer Navigation */}
+          <nav className="hidden md:flex items-center gap-1 lg:gap-2">
+            {navLinks.map((item) => {
+              const isActive = activeTab === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => onTabChange(item.id)}
+                  className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
+                    isActive
+                      ? 'bg-beauty-forest text-beauty-ivory font-semibold shadow-2xs'
+                      : 'text-beauty-charcoal hover:text-beauty-forest hover:bg-beauty-cream'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              );
+            })}
+          </nav>
 
-          {/* Right Header Badges & Actions */}
+          {/* Right Header Controls (Subtle, non-dominating) */}
           <div className="hidden sm:flex items-center gap-3">
-            {/* API Mode & Credit Status Pill */}
+            {/* Quick API & Simulation Status Icon */}
             <button
               onClick={() => setIsApiModalOpen(true)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/[0.1] bg-editorial-surface/80 hover:border-editorial-lime/40 transition-all text-xs"
-              title="Click to configure YouCam S2S API credentials and switch modes"
+              title="Camera & AI Service Configuration"
+              className="p-2.5 rounded-full text-beauty-muted hover:text-beauty-forest hover:bg-beauty-cream transition-colors border border-beauty-muted-border"
             >
-              <span className={`w-2 h-2 rounded-full ${isMockMode ? 'bg-amber-400' : 'bg-editorial-lime animate-pulse'}`} />
-              <span className="font-mono text-2xs uppercase tracking-wider text-editorial-text-secondary">
-                {isMockMode ? 'Sandbox Mode' : 'YouCam Live API'}
-              </span>
-              <span className="text-2xs font-mono text-editorial-lime font-bold pl-1 border-l border-white/10">
-                {units} Units
-              </span>
+              <Cpu className="w-4 h-4" />
             </button>
 
-            {/* User Quick Profile Chip */}
+            {/* Guest Config & Preferences Button (Zero Account / PCPartPicker Style) */}
             <button
               onClick={() => onTabChange('profile')}
-              className="flex items-center gap-2.5 pl-2 pr-3 py-1 rounded-full bg-editorial-card border border-white/[0.08] hover:border-editorial-lime/40 transition-colors"
+              title="Guest Care Preferences & Sensitivities (Stored in browser)"
+              className={`flex items-center gap-2 pl-3 pr-3.5 py-1.5 rounded-full border transition-all ${
+                activeTab === 'profile'
+                  ? 'border-beauty-forest bg-beauty-forest text-beauty-ivory'
+                  : 'border-beauty-muted-border bg-white text-beauty-charcoal hover:border-beauty-forest hover:bg-beauty-cream'
+              }`}
             >
-              <img
-                src={profile.avatarUrl}
-                alt={profile.name}
-                className="w-7 h-7 rounded-full object-cover border border-white/10"
-              />
-              <div className="text-left hidden md:block">
-                <div className="text-xs font-semibold text-white leading-tight">
-                  {profile.name.split(' ')[0]}
-                </div>
-                <div className="text-2xs text-editorial-text-muted leading-tight font-mono">
-                  {profile.skin.type} • {profile.skin.fitzpatrick}
-                </div>
-              </div>
+              <SlidersHorizontal className={`w-3.5 h-3.5 ${activeTab === 'profile' ? 'text-beauty-lime' : 'text-beauty-forest'}`} />
+              <span className="text-xs font-semibold">Preferences</span>
+              <span className={`text-[10px] uppercase font-mono px-1.5 py-0.5 rounded border ${
+                activeTab === 'profile'
+                  ? 'bg-white/20 border-white/30 text-white'
+                  : 'bg-beauty-cream border-beauty-muted-border text-beauty-forest'
+              }`}>
+                Guest
+              </span>
             </button>
           </div>
 
-          {/* Mobile menu toggle */}
-          <div className="lg:hidden flex items-center gap-2">
+          {/* Mobile menu hamburger */}
+          <div className="md:hidden flex items-center gap-2">
             <button
-              onClick={() => setIsApiModalOpen(true)}
-              className="p-2 rounded-lg bg-editorial-card border border-white/10 text-editorial-text-secondary"
+              onClick={() => onTabChange('profile')}
+              title="Guest Preferences & Sensitivities"
+              className={`p-2 rounded-full border ${
+                activeTab === 'profile'
+                  ? 'border-beauty-forest bg-beauty-forest text-beauty-ivory'
+                  : 'border-beauty-muted-border bg-white text-beauty-charcoal'
+              }`}
             >
-              <Cpu className="w-4 h-4 text-editorial-lime" />
+              <SlidersHorizontal className="w-4 h-4" />
             </button>
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 rounded-lg bg-editorial-card border border-white/10 text-editorial-text-secondary hover:text-white"
+              className="p-2 rounded-full border border-beauty-muted-border bg-white text-beauty-charcoal"
             >
               {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -172,129 +160,121 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Mobile Dropdown Menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden border-t border-white/[0.08] bg-editorial-surface/95 backdrop-blur-xl px-4 py-4 space-y-1">
-            {navItems.map((item) => (
+          <div className="md:hidden border-t border-beauty-muted-border bg-[#F8F6F0] px-4 py-4 space-y-1 shadow-lg">
+            {navLinks.map((item) => (
               <button
                 key={item.id}
                 onClick={() => {
                   onTabChange(item.id);
                   setIsMobileMenuOpen(false);
                 }}
-                className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm ${
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium ${
                   activeTab === item.id
-                    ? 'bg-editorial-lime/10 text-editorial-lime font-semibold'
-                    : 'text-editorial-text-secondary hover:bg-white/[0.04]'
+                    ? 'bg-beauty-forest text-beauty-ivory font-semibold'
+                    : 'text-beauty-charcoal hover:bg-beauty-cream'
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <span>{item.icon}</span>
-                  <span>{item.label}</span>
-                </div>
-                {item.badge && (
-                  <span className="text-2xs font-mono px-2 py-0.5 rounded bg-editorial-lime/20 text-editorial-lime">
-                    {item.badge}
-                  </span>
-                )}
+                <span>{item.icon}</span>
+                <span>{item.label}</span>
               </button>
             ))}
 
-            <div className="pt-3 border-t border-white/10 flex items-center justify-between">
-              <span className="text-xs text-editorial-text-secondary">YouCam Credits:</span>
-              <span className="font-mono text-xs text-editorial-lime font-bold">{units} Bonus Units</span>
+            <button
+              onClick={() => {
+                onTabChange('profile');
+                setIsMobileMenuOpen(false);
+              }}
+              className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-medium ${
+                activeTab === 'profile'
+                  ? 'bg-beauty-forest text-beauty-ivory font-semibold'
+                  : 'text-beauty-charcoal hover:bg-beauty-cream'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <SlidersHorizontal className="w-4 h-4" />
+                <span>Preferences &amp; Sensitivities</span>
+              </div>
+              <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-beauty-cream text-beauty-forest border border-beauty-muted-border">
+                Guest Mode
+              </span>
+            </button>
+
+            <div className="pt-3 border-t border-beauty-muted-border flex items-center justify-between px-2">
+              <span className="text-xs text-beauty-muted">AI Camera Units:</span>
+              <button
+                onClick={() => {
+                  setIsApiModalOpen(true);
+                  setIsMobileMenuOpen(false);
+                }}
+                className="text-xs font-semibold text-beauty-forest underline"
+              >
+                {units} Units Available
+              </button>
             </div>
           </div>
         )}
       </header>
 
-      {/* YouCam API Credentials & Mode Settings Modal */}
+      {/* API Configuration Modal */}
       <Modal
         isOpen={isApiModalOpen}
         onClose={() => setIsApiModalOpen(false)}
-        title="YouCam S2S API & Intelligence Configuration"
-        subtitle="Manage credentials, unit consumption, and simulation environments"
+        title="Beauty Intelligence Settings"
+        subtitle="Configure image analysis adapters and camera API credentials"
       >
         <div className="space-y-5">
-          {/* Active status banner */}
-          <div className="p-4 rounded-xl border border-white/10 bg-editorial-bg flex items-start gap-3">
-            <div className={`p-2 rounded-lg ${isMockMode ? 'bg-amber-500/10 text-amber-400' : 'bg-editorial-lime/10 text-editorial-lime'}`}>
-              <ShieldCheck className="w-5 h-5" />
+          <div className="p-4 rounded-2xl border border-beauty-muted-border bg-beauty-cream/50 space-y-2">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-beauty-forest" />
+              <h4 className="text-xs font-bold uppercase tracking-wider text-beauty-charcoal">
+                {isMockMode ? 'Sandbox Demonstration Mode' : 'Live YouCam API Connected'}
+              </h4>
             </div>
+            <p className="text-xs text-beauty-muted leading-relaxed">
+              {isMockMode 
+                ? 'High-fidelity demonstration adapters are active so you can freely explore hair, makeup, and skin experiences without consuming API units.' 
+                : 'Direct server-to-server calls to Perfect Corp YouCam endpoints are enabled.'}
+            </p>
+          </div>
+
+          <div className="flex items-center justify-between p-4 rounded-2xl border border-beauty-muted-border bg-white">
             <div>
-              <div className="text-sm font-semibold text-white">
-                {isMockMode ? 'Sandbox Simulation Environment Active' : 'Live YouCam Production Pipeline Active'}
-              </div>
-              <p className="text-xs text-editorial-text-secondary mt-1 leading-relaxed">
-                {isMockMode
-                  ? 'All 28+ diagnostics (Skin, Hair, Makeup, Beard, Proportions) run against high-fidelity neural mock adapters. 0 API credits are consumed.'
-                  : 'Requests are securely routed to https://yce-api-01.makeupar.com/s2s/v2.0 using your Bearer key. Each diagnostic decrements 1 unit.'}
-              </p>
+              <div className="text-xs font-semibold text-beauty-charcoal">Sandbox Mode</div>
+              <div className="text-2xs text-beauty-muted">Conserve your 1,000 bonus YouCam units during testing</div>
             </div>
+            <input
+              type="checkbox"
+              checked={isMockMode}
+              onChange={(e) => onToggleMockMode(e.target.checked)}
+              className="w-4 h-4 accent-beauty-forest cursor-pointer"
+            />
           </div>
 
-          {/* Unit Quota Card */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="p-3.5 rounded-xl border border-white/[0.08] bg-editorial-card">
-              <div className="text-2xs uppercase tracking-wider text-editorial-text-muted">Available Bonus Quota</div>
-              <div className="text-xl font-bold font-mono text-editorial-lime mt-1">{units} Units</div>
-              <div className="text-2xs text-editorial-text-secondary mt-0.5">Perfect Corp Developer Tier</div>
-            </div>
-            <div className="p-3.5 rounded-xl border border-white/[0.08] bg-editorial-card">
-              <div className="text-2xs uppercase tracking-wider text-editorial-text-muted">Protocol Architecture</div>
-              <div className="text-sm font-mono text-white mt-1">S2S V2.0 REST</div>
-              <div className="text-2xs text-editorial-text-secondary mt-0.5">Asynchronous Task Polling</div>
-            </div>
-          </div>
-
-          {/* Mode Switcher Toggle */}
-          <div className="p-4 rounded-xl border border-white/[0.08] bg-editorial-card flex items-center justify-between">
-            <div>
-              <div className="text-sm font-semibold text-white">Sandbox Mock Mode</div>
-              <div className="text-xs text-editorial-text-secondary">Conserve bonus units during product evaluation</div>
-            </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                checked={isMockMode}
-                onChange={(e) => onToggleMockMode(e.target.checked)}
-                className="sr-only peer"
-              />
-              <div className="w-11 h-6 bg-editorial-subtle peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-editorial-lime peer-checked:after:bg-black" />
-            </label>
-          </div>
-
-          {/* API Key Input */}
-          <div className="space-y-2">
-            <label className="block text-xs font-medium text-editorial-text-secondary flex items-center gap-1.5">
-              <Key className="w-3.5 h-3.5 text-editorial-lime" />
-              <span>YouCam S2S API Key (Bearer Token)</span>
+          <div className="space-y-1.5">
+            <label className="block text-xs font-medium text-beauty-charcoal">
+              Optional YouCam Bearer Token / API Key
             </label>
             <input
               type="password"
               value={apiKeyInput}
               onChange={(e) => setApiKeyInput(e.target.value)}
-              placeholder="eyJhbGciOi... or leave empty for Sandbox Mode"
-              className="w-full px-3.5 py-2.5 rounded-xl bg-editorial-bg border border-white/12 text-sm text-white placeholder-editorial-text-muted font-mono focus:border-editorial-lime focus:outline-none"
+              placeholder="Leave empty for zero-cost Sandbox Mode"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-beauty-muted-border bg-white text-xs text-beauty-charcoal focus:border-beauty-forest focus:outline-none"
             />
-            <p className="text-2xs text-editorial-text-muted">
-              Credentials remain client/server scoped and are never transmitted to unauthorized 3rd parties.
-            </p>
           </div>
 
-          {/* Modal Actions */}
-          <div className="pt-2 flex items-center justify-end gap-3 border-t border-white/[0.08]">
+          <div className="pt-2 flex items-center justify-end gap-3 border-t border-beauty-muted-border">
             <button
-              type="button"
               onClick={() => setIsApiModalOpen(false)}
-              className="px-4 py-2 text-xs font-semibold rounded-lg text-editorial-text-secondary hover:text-white"
+              className="px-4 py-2 text-xs font-semibold text-beauty-muted hover:text-beauty-charcoal"
             >
               Cancel
             </button>
             <button
-              type="button"
               onClick={handleSaveApiKey}
-              className="px-5 py-2 text-xs font-semibold rounded-lg bg-editorial-lime text-black hover:bg-editorial-lime-hover shadow-subtle-glow transition-all"
+              className="px-5 py-2 text-xs font-semibold rounded-full bg-beauty-forest text-beauty-ivory hover:bg-beauty-forest-hover shadow-sm"
             >
-              Save & Apply Settings
+              Apply Settings
             </button>
           </div>
         </div>

@@ -42,6 +42,26 @@ export class StorageService {
     this.saveUserProfile(profile);
   }
 
+  public static getRoutines(): Routine[] {
+    try {
+      const data = localStorage.getItem(STORAGE_KEYS.ACTIVE_ROUTINES);
+      if (data) {
+        return JSON.parse(data);
+      }
+    } catch (e) {
+      console.error('Failed to load routines from storage:', e);
+    }
+    return [];
+  }
+
+  public static saveRoutines(routines: Routine[]): void {
+    try {
+      localStorage.setItem(STORAGE_KEYS.ACTIVE_ROUTINES, JSON.stringify(routines));
+    } catch (e) {
+      console.error('Failed to save routines to storage:', e);
+    }
+  }
+
   public static deleteSavedLook(lookId: string): void {
     const profile = this.getUserProfile();
     profile.savedLooks = (profile.savedLooks || []).filter(l => l.id !== lookId);
