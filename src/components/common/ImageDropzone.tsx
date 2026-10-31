@@ -14,17 +14,17 @@ const SAMPLE_PORTRAITS = [
   {
     id: 'sample-1',
     name: 'Portrait 1 (Warm Olive • Balanced T-Zone)',
-    url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=facearea&facepad=2.2&w=800&h=800&q=80',
+    url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=facearea&facepad=1.4&w=800&h=800&q=80',
   },
   {
     id: 'sample-2',
     name: 'Portrait 2 (Beard Grooming • Textured)',
-    url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?fit=facearea&facepad=2.2&w=800&h=800&q=80',
+    url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?fit=facearea&facepad=1.4&w=800&h=800&q=80',
   },
   {
     id: 'sample-3',
     name: 'Portrait 3 (Golden Tone • Natural Glow)',
-    url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?fit=facearea&facepad=2.2&w=800&h=800&q=80',
+    url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?fit=facearea&facepad=1.4&w=800&h=800&q=80',
   }
 ];
 
